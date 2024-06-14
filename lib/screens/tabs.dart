@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meals/data/dummy_data.dart';
 import 'package:meals/models/meal.dart';
+import 'package:meals/models/meal_extended.dart';
 import 'package:meals/screens/categories.dart';
 import 'package:meals/screens/filters.dart';
 import 'package:meals/screens/meals.dart';
@@ -24,7 +25,7 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   int _selectedPageIndex = 0;
-  final List<Meal> _favoriteMeals = [];
+  final List<MealExtended> _favoriteMeals = [];
   Map<Filter, bool> _selectedFilters = kInitialFilters;
 
   void _showInfoMessage(String message) {
@@ -36,16 +37,17 @@ class _TabsScreenState extends State<TabsScreen> {
     );
   }
 
-  void _toggleMealFavoriteStatus(Meal meal) {
-    var isExisting = _favoriteMeals.contains(meal);
-    if (isExisting) {
+  void _toggleMealFavoriteStatus(MealExtended mealExtended) {
+    if (mealExtended.isFavorite) {
+      mealExtended.isFavorite = false;
       setState(() {
-        _favoriteMeals.remove(meal);
+        _favoriteMeals.remove(mealExtended);
       });
       _showInfoMessage('Meal is no longer a favorite.');
     } else {
+      mealExtended.isFavorite = true;
       setState(() {
-        _favoriteMeals.add(meal);
+        _favoriteMeals.add(mealExtended);
       });
       _showInfoMessage('Marked as a favorite!');
     }
@@ -75,7 +77,7 @@ class _TabsScreenState extends State<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final availableMeals = dummyMeals.where((meal) {
+    final filteredMeals = dummyMeals.where((meal) {
       if (_selectedFilters[Filter.glutenFree]! && !meal.isGlutenFree) {
         return false;
       }
@@ -90,7 +92,16 @@ class _TabsScreenState extends State<TabsScreen> {
       }
       return true;
     }).toList();
-
+    final List<MealExtended> availableMeals = [];
+    for (Meal meal in filteredMeals) {
+      bool isFavorite = false;
+      for (var ext in _favoriteMeals) {
+        if (ext.meal == meal) {
+          isFavorite = true;
+        }
+      }
+      availableMeals.add(MealExtended(meal: meal, isFavorite: isFavorite));
+    }
     Widget activePage = CategoriesScreen(
       onToggleFavorite: _toggleMealFavoriteStatus,
       availableMeals: availableMeals,

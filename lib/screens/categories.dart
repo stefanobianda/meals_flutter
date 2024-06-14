@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meals/data/dummy_data.dart';
 import 'package:meals/models/category.dart';
-import 'package:meals/models/meal.dart';
+import 'package:meals/models/meal_extended.dart';
 import 'package:meals/screens/meals.dart';
 import 'package:meals/widgets/category_grid_item.dart';
 
@@ -11,12 +11,13 @@ class CategoriesScreen extends StatelessWidget {
       required this.onToggleFavorite,
       required this.availableMeals});
 
-  final void Function(Meal meal) onToggleFavorite;
-  final List<Meal> availableMeals;
+  final void Function(MealExtended meal) onToggleFavorite;
+  final List<MealExtended> availableMeals;
 
   void _selectCategory(BuildContext context, Category category) {
     final filteredMeals = availableMeals
-        .where((meal) => meal.categories.contains(category.id))
+        .where((mealExtended) =>
+            mealExtended.meal.categories.contains(category.id))
         .toList();
     // Both functions do the same thing:
     //   Navigator.push(context, route);

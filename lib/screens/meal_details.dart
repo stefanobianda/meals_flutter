@@ -1,29 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:meals/models/meal.dart';
+import 'package:meals/models/meal_extended.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class MealDetailScreen extends StatelessWidget {
   const MealDetailScreen(
       {super.key,
-      required this.meal,
+      required this.mealExtended,
       required this.isFavorite,
       required this.onToggleFavorite});
 
-  final Meal meal;
+  final MealExtended mealExtended;
   final bool isFavorite;
-  final void Function(Meal meal) onToggleFavorite;
+  final void Function(MealExtended meal) onToggleFavorite;
 
   @override
   Widget build(BuildContext context) {
+    Meal meal = mealExtended.meal;
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
         actions: [
           IconButton(
             onPressed: () {
-              onToggleFavorite(meal);
+              onToggleFavorite(mealExtended);
             },
-            icon: const Icon(Icons.star_border),
+            icon: mealExtended.isFavorite
+                ? const Icon(Icons.star)
+                : const Icon(Icons.star_border),
           ),
         ],
       ),

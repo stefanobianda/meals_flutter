@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:meals/models/meal.dart';
+import 'package:meals/models/meal_extended.dart';
 import 'package:meals/widgets/meal_item_trait.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class MealItem extends StatelessWidget {
-  const MealItem({super.key, required this.meal, required this.onSelectMeal});
+  const MealItem(
+      {super.key, required this.mealExtended, required this.onSelectMeal});
 
-  final Meal meal;
-  final void Function(Meal meal) onSelectMeal;
+  final MealExtended mealExtended;
+  final void Function(MealExtended mealExtended) onSelectMeal;
 
   String get complexityText {
-    return meal.complexity.name[0].toUpperCase() +
-        meal.complexity.name.substring(1);
+    return mealExtended.meal.complexity.name[0].toUpperCase() +
+        mealExtended.meal.complexity.name.substring(1);
   }
 
   String get affordabilityText {
-    return meal.affordability.name[0].toUpperCase() +
-        meal.affordability.name.substring(1);
+    return mealExtended.meal.affordability.name[0].toUpperCase() +
+        mealExtended.meal.affordability.name.substring(1);
   }
 
   @override
   Widget build(BuildContext context) {
+    Meal meal = mealExtended.meal;
     return Card(
       margin: const EdgeInsets.all(8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -28,7 +31,7 @@ class MealItem extends StatelessWidget {
       elevation: 2,
       child: InkWell(
         onTap: () {
-          onSelectMeal(meal);
+          onSelectMeal(mealExtended);
         },
         child: Stack(
           children: [
