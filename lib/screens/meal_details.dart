@@ -3,7 +3,7 @@ import 'package:meals/models/meal.dart';
 import 'package:meals/models/meal_extended.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class MealDetailScreen extends StatelessWidget {
+class MealDetailScreen extends StatefulWidget {
   const MealDetailScreen(
       {super.key,
       required this.mealExtended,
@@ -15,17 +15,22 @@ class MealDetailScreen extends StatelessWidget {
   final void Function(MealExtended meal) onToggleFavorite;
 
   @override
+  State<MealDetailScreen> createState() => _MealDetailScreenState();
+}
+
+class _MealDetailScreenState extends State<MealDetailScreen> {
+  @override
   Widget build(BuildContext context) {
-    Meal meal = mealExtended.meal;
+    Meal meal = widget.mealExtended.meal;
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
         actions: [
           IconButton(
             onPressed: () {
-              onToggleFavorite(mealExtended);
+              widget.onToggleFavorite(widget.mealExtended);
             },
-            icon: mealExtended.isFavorite
+            icon: widget.mealExtended.isFavorite
                 ? const Icon(Icons.star)
                 : const Icon(Icons.star_border),
           ),
