@@ -19,6 +19,15 @@ class MealDetailScreen extends StatefulWidget {
 }
 
 class _MealDetailScreenState extends State<MealDetailScreen> {
+  bool isFavorite = false;
+
+  void onToggleFavorite(MealExtended mealExtended) {
+    widget.onToggleFavorite(widget.mealExtended);
+    setState(() {
+      isFavorite = mealExtended.isFavorite;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Meal meal = widget.mealExtended.meal;
@@ -28,7 +37,7 @@ class _MealDetailScreenState extends State<MealDetailScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              widget.onToggleFavorite(widget.mealExtended);
+              onToggleFavorite(widget.mealExtended);
             },
             icon: widget.mealExtended.isFavorite
                 ? const Icon(Icons.star)
