@@ -28,9 +28,15 @@ class _CategoriesScreenState extends State<CategoriesScreen>
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
-      lowerBound: 0,
-      upperBound: 1,
+      lowerBound: 0, // default
+      upperBound: 1, // default
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   void _selectCategory(BuildContext context, Category category) {
