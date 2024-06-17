@@ -31,6 +31,8 @@ class _CategoriesScreenState extends State<CategoriesScreen>
       lowerBound: 0, // default
       upperBound: 1, // default
     );
+
+    _animationController.forward();
   }
 
   @override
