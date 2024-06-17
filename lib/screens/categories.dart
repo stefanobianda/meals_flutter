@@ -65,7 +65,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
       animation: _animationController,
       builder: (context, child) => Padding(
         padding: EdgeInsets.only(
-          top: _animationController.value * 100,
+          top: 100 - _animationController.value * 100,
         ),
         child: child,
       ),
