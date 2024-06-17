@@ -64,14 +64,17 @@ class _CategoriesScreenState extends State<CategoriesScreen>
     return AnimatedBuilder(
       animation: _animationController,
       builder: (context, child) => SlideTransition(
-        position: _animationController.drive(
-          Tween(
-            begin: const Offset(0, 0.3),
-            end: const Offset(0, 0),
+        position: Tween(
+          begin: const Offset(0, 0.3),
+          end: Offset.zero,
+        ).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.bounceInOut,
           ),
         ),
         child: child,
-      );
+      ),
       child: GridView(
         padding: const EdgeInsets.all(24),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
