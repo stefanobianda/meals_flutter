@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals/models/meal.dart';
 import 'package:meals/providers/favorites_provider.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class MealDetailScreen extends ConsumerWidget {
   const MealDetailScreen({super.key, required this.meal});
@@ -18,39 +17,42 @@ class MealDetailScreen extends ConsumerWidget {
         title: Text(meal.title),
         actions: [
           IconButton(
-              onPressed: () {
-                final wasAdded = ref
-                    .read(favoritesMealsProvider.notifier)
-                    .toggleMealFavoritesStatus(meal);
-                ScaffoldMessenger.of(context).clearSnackBars();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(wasAdded
-                        ? 'Meal added as a favorite.'
-                        : 'Meal removed.'),
-                  ),
+            onPressed: () {
+              final wasAdded = ref
+                  .read(favoritesMealsProvider.notifier)
+                  .toggleMealFavoritesStatus(meal);
+              ScaffoldMessenger.of(context).clearSnackBars();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                      wasAdded ? 'Meal added as a favorite.' : 'Meal removed.'),
+                ),
+              );
+            },
+            icon: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) {
+                return RotationTransition(
+                  turns: Tween<double>(
+                    begin: 0.8,
+                    end: 1,
+                  ).animate(animation),
+                  child: child,
                 );
               },
-              icon: AnimatedSwitcher(
-                duration: const Duration(microseconds: 300),
-                transitionBuilder: (child, animation) {
-                  return RotationTransition(
-                    turns: animation,
-                    child: child,
-                  );
-                },
-                child: isFavorite
-                    ? const Icon(Icons.star)
-                    : const Icon(Icons.star_border),
-              )),
+              child: Icon(
+                isFavorite ? Icons.star : Icons.star_border,
+                key: ValueKey(isFavorite),
+              ),
+            ),
+          ),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            FadeInImage(
-              placeholder: MemoryImage(kTransparentImage),
-              image: NetworkImage(meal.imageUrl),
+            Image.network(
+              meal.imageUrl,
               fit: BoxFit.cover,
               height: 300,
               width: double.infinity,
